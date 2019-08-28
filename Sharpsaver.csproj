@@ -76,6 +76,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InteropHelper.cs" />
+    <Compile Include="Models\Brick.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
     <Compile Include="ViewModels\ObservableObject.cs" />

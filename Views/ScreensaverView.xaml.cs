@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Sharpsaver.Models;
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,6 +14,8 @@ namespace Sharpsaver.Views
     {
         private bool isPreviewWindow;
         private Point lastMousePosition = default;
+        private System.Windows.Threading.DispatcherTimer dispatcherTimer;
+        private List<Brick> bricks;
 
         public ScreensaverView()
         {
@@ -19,10 +23,10 @@ namespace Sharpsaver.Views
             isPreviewWindow = false;
         }
         public ScreensaverView(IntPtr previewHandle)
-        {            
+        {
             InitializeComponent();
             WindowState = WindowState.Normal;
-            isPreviewWindow = true;            
+            isPreviewWindow = true;
 
             IntPtr windowHandle = new WindowInteropHelper(GetWindow(this)).EnsureHandle();
 
@@ -41,28 +45,50 @@ namespace Sharpsaver.Views
             InteropHelper.GetClientRect(previewHandle, out Rect parentRect);
 
             Width = parentRect.Width;
-            Height = parentRect.Height;            
+            Height = parentRect.Height;
         }
 
         private void Draw()
         {
             Rectangle bkgRect = new Rectangle();
-            SolidColorBrush brush = new SolidColorBrush();
-            brush.Color = Colors.White;
-            bkgRect.Fill = brush;
+            bkgRect.Fill = new SolidColorBrush(Colors.White);
             var size = this.Field.Width > this.Field.Height ? this.Field.Height : this.Field.Width;
             bkgRect.Width = size;
             bkgRect.Height = size;
-            Canvas.SetLeft(bkgRect, (this.Field.Width - size) / 2);
+            var LEFT = (this.Field.Width - size) / 2;
+            var CENTERX = LEFT + size / 2;
+            var CENTERY = size / 2;
+            var RIGHT = LEFT + size;
+            Canvas.SetLeft(bkgRect, LEFT);
 
             Ellipse ellipse = new Ellipse();
             ellipse.Width = size;
             ellipse.Height = size;
+            ellipse.Fill = new SolidColorBrush(Colors.LightGray);
             ellipse.Stroke = new SolidColorBrush(Colors.Gray);
-            ellipse.StrokeThickness = size/100;
-            Canvas.SetLeft(ellipse, (this.Field.Width - size) / 2);
+            ellipse.StrokeThickness = size / 100;
+            Canvas.SetLeft(ellipse, LEFT);
+
             this.Field.Children.Add(bkgRect);
             this.Field.Children.Add(ellipse);
+
+            bricks = new List<Brick>();
+            for (double y = 0; y < size; y += 45)
+                for (double x = LEFT - (y % 2) * 25; x <= RIGHT; x += 50)
+                {
+                    var normX = x + 25 - CENTERX;
+                    var normY = y + 22.5 - CENTERY;
+                    var radius = size / 2;
+                    var normDistance = ((double)(normX * normX) / (radius * radius)) + ((double)(normY * normY) / (radius * radius));
+                    if (normDistance <= 0.90)
+                        bricks.Add(new Brick(x, y));
+                    else if (normDistance < 1.05)
+                        bricks.Add(new Brick(x, y, true));
+                }
+            foreach (var brick in bricks)
+            {
+                this.Field.Children.Add(brick.brick);
+            }
         }
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
@@ -97,7 +123,18 @@ namespace Sharpsaver.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //  DispatcherTimer setup
+            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Start();
+
             Draw();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            bricks[Brick.random.Next(bricks.Count)].Switch();
         }
     }
 }

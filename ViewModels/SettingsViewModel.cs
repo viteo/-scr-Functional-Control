@@ -7,14 +7,13 @@ namespace Sharpsaver.ViewModels
 {
     public class SettingsViewModel : ObservableObject
     {
-        private Settings settings;
 
         public Param1 Parameter1
         {
-            get => settings.param1;
+            get => Settings.Instance.param1;
             set
             {
-                settings.param1 = value;
+                Settings.Instance.param1 = value;
                 OnPropertyChanged();
             }
                 
@@ -22,38 +21,38 @@ namespace Sharpsaver.ViewModels
 
         public Param2 Parameter2
         {
-            get => settings.param2;
+            get => Settings.Instance.param2;
             set
             {
-                settings.param2 = value;
+                Settings.Instance.param2 = value;
                 OnPropertyChanged();
             }
         }
 
         public int Parameter3
         {
-            get => settings.param3;
+            get => Settings.Instance.param3;
             set
             {
-                settings.param3 = value;
+                Settings.Instance.param3 = value;
                 OnPropertyChanged();
             }
         }
 
         public bool Parameter4
         {
-            get => settings.param4;
+            get => Settings.Instance.param4;
             set
             {
-                settings.param4 = value;
+                Settings.Instance.param4 = value;
                 OnPropertyChanged();
             }
         }
 
         public SettingsViewModel()
         {
-            settings = new Settings();
-            settings.LoadSettings();
+            Settings.Instance = new Settings();
+            Settings.Instance.LoadSettings();
         }
 
         public ICommand SaveCommand
@@ -63,7 +62,7 @@ namespace Sharpsaver.ViewModels
 
         public void Save()
         {
-            settings.SaveSettings();
+            Settings.Instance.SaveSettings();
             Application.Current.Shutdown();
         }
 

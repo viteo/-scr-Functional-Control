@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Sharpsaver.Views
 {
@@ -41,6 +44,27 @@ namespace Sharpsaver.Views
             Height = parentRect.Height;            
         }
 
+        private void Draw()
+        {
+            Rectangle bkgRect = new Rectangle();
+            SolidColorBrush brush = new SolidColorBrush();
+            brush.Color = Colors.White;
+            bkgRect.Fill = brush;
+            var size = this.Field.Width > this.Field.Height ? this.Field.Height : this.Field.Width;
+            bkgRect.Width = size;
+            bkgRect.Height = size;
+            Canvas.SetLeft(bkgRect, (this.Field.Width - size) / 2);
+
+            Ellipse ellipse = new Ellipse();
+            ellipse.Width = size;
+            ellipse.Height = size;
+            ellipse.Stroke = new SolidColorBrush(Colors.Gray);
+            ellipse.StrokeThickness = size/100;
+            Canvas.SetLeft(ellipse, (this.Field.Width - size) / 2);
+            this.Field.Children.Add(bkgRect);
+            this.Field.Children.Add(ellipse);
+        }
+
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
             if (isPreviewWindow) return;
@@ -69,6 +93,11 @@ namespace Sharpsaver.Views
             if (isPreviewWindow) return;
 
             Application.Current.Shutdown();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Draw();
         }
     }
 }

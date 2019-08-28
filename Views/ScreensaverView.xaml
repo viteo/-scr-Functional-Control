@@ -5,16 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sharpsaver.Views"
         mc:Ignorable="d"        
-        Top="0" Left="0" WindowState="Maximized" WindowStyle="None" WindowStartupLocation="Manual" ShowInTaskbar="False" ResizeMode="NoResize" AllowsTransparency="False"
-
+        Top="0" Left="0" WindowState="Maximized" WindowStyle="None" WindowStartupLocation="Manual" ShowInTaskbar="False" ResizeMode="NoResize" AllowsTransparency="True"
+        x:Name="ScreensaverWindow"
         Title="Screensaver" 
-        Background="DimGray"
+        Background="Transparent"
         MouseMove="Window_MouseMove" 
         MouseDown="Window_MouseDown"
-        KeyDown="Window_KeyDown">
+        KeyDown="Window_KeyDown"
+        Loaded="Window_Loaded">
     <Viewbox Stretch="Fill">
-        <Canvas Width="400" Height="300">
-            <Rectangle Width="200"
+        <Canvas Width="{Binding ElementName=ScreensaverWindow, Path=ActualWidth}"
+                Height="{Binding ElementName=ScreensaverWindow, Path=ActualHeight}"
+                x:Name="Field">
+            <!--<Rectangle Width="200"
                        Height="100"
                        Fill="DodgerBlue"
                        Stroke="White"
@@ -33,7 +36,7 @@
                        Canvas.Left="60" 
                        Canvas.Top="125"
                        Panel.ZIndex="3"
-                       Text="Sharpsaver"/>
+                       Text="Sharpsaver"/>-->
         </Canvas>
     </Viewbox>
 </Window>

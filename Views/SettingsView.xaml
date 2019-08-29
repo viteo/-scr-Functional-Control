@@ -33,10 +33,6 @@
         <ComboBox ItemsSource="{Binding Source={StaticResource enumValues1}}"
                   SelectedItem="{Binding Layout}"
                   Margin="5"/>
-        <TextBlock Text="Parameter 2"/>
-        <ComboBox ItemsSource="{Binding Source={StaticResource enumValues2}}"
-                  SelectedItem="{Binding Parameter2}"
-                  Margin="5"/>
         <TextBlock Text="Brick size"/>
         <Grid Margin="5" >
             <Grid.ColumnDefinitions>

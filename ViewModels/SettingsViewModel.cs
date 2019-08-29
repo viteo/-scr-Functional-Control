@@ -1,5 +1,4 @@
 ﻿using Sharpsaver.Models;
-using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -16,7 +15,6 @@ namespace Sharpsaver.ViewModels
                 Settings.Instance.Layout = value;
                 OnPropertyChanged();
             }
-
         }
 
         public Param2 Parameter2
@@ -48,7 +46,6 @@ namespace Sharpsaver.ViewModels
                 OnPropertyChanged();
             }
         }
-
 
         public bool ShowMagicNumber
         {

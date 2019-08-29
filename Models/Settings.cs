@@ -35,6 +35,7 @@ namespace Sharpsaver.Models
         public Param2 param2 { get; set; }
         public int BrickSize { get; set; }
         public double SwitchPeriod { get; set; }
+        public bool ShowMagicNumber { get; set; }
         public bool IsFullscreen { get; set; }
 
         public Settings()
@@ -43,7 +44,8 @@ namespace Sharpsaver.Models
             this.Layout = Layout.Straight;
             this.param2 = Param2.Ei;
             this.BrickSize = 4;
-            this.IsFullscreen = false;
+            this.ShowMagicNumber = true;
+            this.IsFullscreen = true;
         }
 
         public void LoadSettings()

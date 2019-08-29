@@ -56,6 +56,7 @@ namespace Sharpsaver.Views
             var CENTERY = size / 2;
             var RIGHT = LEFT + size;
 
+            //Background rectangle
             Rectangle bkgRect = new Rectangle();
             bkgRect.Fill = new SolidColorBrush(Colors.White);
             if (Settings.Instance.IsFullscreen)
@@ -70,8 +71,8 @@ namespace Sharpsaver.Views
                 bkgRect.Height = size;
                 Canvas.SetLeft(bkgRect, LEFT);
             }
-            
 
+            //Background ellipse
             Ellipse bkgCircle = new Ellipse();
             bkgCircle.Width = size;
             bkgCircle.Height = size;
@@ -79,10 +80,10 @@ namespace Sharpsaver.Views
             bkgCircle.Stroke = new SolidColorBrush(Colors.Gray);
             bkgCircle.StrokeThickness = size / 100;
             Canvas.SetLeft(bkgCircle, LEFT);
-
             this.Field.Children.Add(bkgRect);
             this.Field.Children.Add(bkgCircle);
 
+            //Filling area with bricks
             Brick.Width = size * Settings.Instance.BrickSize / 100;
             Brick.Height = size * Settings.Instance.BrickSize / 110;
             bricks = new List<Brick>();
@@ -107,6 +108,20 @@ namespace Sharpsaver.Views
             {
                 this.Field.Children.Add(brick.brick);
                 this.Field.Children.Add(brick.dot);
+            }
+
+            //Fancy magic number
+            if (Settings.Instance.ShowMagicNumber)
+            {
+                this.MagicNumber.Visibility = Visibility.Visible;
+                this.MagicNumber.FontSize = size / 30;
+                this.MagicNumber.BorderThickness = new Thickness(size / 100);
+                this.MagicNumber.Text =
+                    12.ToString() +
+                    Settings.Random.Next(01, 100).ToString("D2") + "-" +
+                    Settings.Random.Next(02, 27).ToString("D2");
+                Canvas.SetLeft(this.MagicNumber, LEFT + size / 30);
+                Canvas.SetTop(this.MagicNumber, size / 30);
             }
         }
 

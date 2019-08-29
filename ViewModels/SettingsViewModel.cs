@@ -16,7 +16,7 @@ namespace Sharpsaver.ViewModels
                 Settings.Instance.Layout = value;
                 OnPropertyChanged();
             }
-                
+
         }
 
         public Param2 Parameter2
@@ -38,13 +38,24 @@ namespace Sharpsaver.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         public double SwitchPeriod
         {
             get => Settings.Instance.SwitchPeriod;
             set
             {
                 Settings.Instance.SwitchPeriod = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public bool ShowMagicNumber
+        {
+            get => Settings.Instance.ShowMagicNumber;
+            set
+            {
+                Settings.Instance.ShowMagicNumber = value;
                 OnPropertyChanged();
             }
         }

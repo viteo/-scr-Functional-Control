@@ -74,6 +74,9 @@
                      Grid.Column="1" 
                      IsEnabled="False"/>
         </Grid>
+        <CheckBox Content="Show Magic number"
+                  IsChecked="{Binding ShowMagicNumber}"
+                  Margin="5"/>
         <CheckBox Content="Fullscreen"
                   IsChecked="{Binding IsFullscreen}"
                   Margin="5"/>

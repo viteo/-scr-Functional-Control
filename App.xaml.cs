@@ -1,13 +1,6 @@
 ﻿using Sharpsaver.Views;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
 
 namespace Sharpsaver
 {
@@ -27,9 +20,10 @@ namespace Sharpsaver
             else if (args.Args[0].ToLower().StartsWith("/p"))
             {
                 //Display a preview of the screensaver using the specified window handle.
-                IntPtr previewHwnd = new IntPtr(Convert.ToInt32(args.Args[1]));
-                var previewWindow = new ScreensaverView(previewHwnd);
-                previewWindow.Show();
+                //IntPtr previewHwnd = new IntPtr(Convert.ToInt32(args.Args[1]));
+                //var previewWindow = new ScreensaverView(previewHwnd);
+                //previewWindow.Show();
+                Application.Current.Shutdown();
             }
             else if (args.Args[0].ToLower().StartsWith("/c"))
             {

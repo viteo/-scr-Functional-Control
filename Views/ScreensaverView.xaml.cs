@@ -50,34 +50,51 @@ namespace Sharpsaver.Views
 
         private void Draw()
         {
-            Rectangle bkgRect = new Rectangle();
-            bkgRect.Fill = new SolidColorBrush(Colors.White);
             var size = this.Field.Width > this.Field.Height ? this.Field.Height : this.Field.Width;
-            bkgRect.Width = size;
-            bkgRect.Height = size;
             var LEFT = (this.Field.Width - size) / 2;
             var CENTERX = LEFT + size / 2;
             var CENTERY = size / 2;
             var RIGHT = LEFT + size;
-            Canvas.SetLeft(bkgRect, LEFT);
 
-            Ellipse ellipse = new Ellipse();
-            ellipse.Width = size;
-            ellipse.Height = size;
-            ellipse.Fill = new SolidColorBrush(Colors.LightGray);
-            ellipse.Stroke = new SolidColorBrush(Colors.Gray);
-            ellipse.StrokeThickness = size / 100;
-            Canvas.SetLeft(ellipse, LEFT);
+            Rectangle bkgRect = new Rectangle();
+            bkgRect.Fill = new SolidColorBrush(Colors.White);
+            if (Settings.Instance.IsFullscreen)
+            {
+                bkgRect.Width = this.Field.Width;
+                bkgRect.Height = this.Field.Height;
+                Canvas.SetLeft(bkgRect, 0);
+            }
+            else
+            {
+                bkgRect.Width = size;
+                bkgRect.Height = size;
+                Canvas.SetLeft(bkgRect, LEFT);
+            }
+            
+
+            Ellipse bkgCircle = new Ellipse();
+            bkgCircle.Width = size;
+            bkgCircle.Height = size;
+            bkgCircle.Fill = new SolidColorBrush(Colors.LightGray);
+            bkgCircle.Stroke = new SolidColorBrush(Colors.Gray);
+            bkgCircle.StrokeThickness = size / 100;
+            Canvas.SetLeft(bkgCircle, LEFT);
 
             this.Field.Children.Add(bkgRect);
-            this.Field.Children.Add(ellipse);
+            this.Field.Children.Add(bkgCircle);
 
+            Brick.Width = size * Settings.Instance.BrickSize / 100;
+            Brick.Height = size * Settings.Instance.BrickSize / 110;
             bricks = new List<Brick>();
-            for (double y = 0; y < size; y += 45)
-                for (double x = LEFT - (y % 2) * 25; x <= RIGHT; x += 50)
+            bool layoutShift = false;
+            for (double y = 0; y < size; y += Brick.Height)
+            {
+                if (Settings.Instance.Layout == Layout.Brickwall)
+                    layoutShift = !layoutShift;
+                for (double x = LEFT - (layoutShift ? 0 : Brick.Width / 2); x <= RIGHT; x += Brick.Width)
                 {
-                    var normX = x + 25 - CENTERX;
-                    var normY = y + 22.5 - CENTERY;
+                    var normX = x + Brick.Width / 2 - CENTERX;
+                    var normY = y + Brick.Height / 2 - CENTERY;
                     var radius = size / 2;
                     var normDistance = ((double)(normX * normX) / (radius * radius)) + ((double)(normY * normY) / (radius * radius));
                     if (normDistance <= 0.90)
@@ -85,9 +102,11 @@ namespace Sharpsaver.Views
                     else if (normDistance < 1.05)
                         bricks.Add(new Brick(x, y, true));
                 }
+            }
             foreach (var brick in bricks)
             {
                 this.Field.Children.Add(brick.brick);
+                this.Field.Children.Add(brick.dot);
             }
         }
 
@@ -123,10 +142,13 @@ namespace Sharpsaver.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Get settins from file or default
+            Settings.Instance = new Settings();
+            Settings.Instance.LoadSettings();
             //  DispatcherTimer setup
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(Settings.Instance.SwitchPeriod);
             dispatcherTimer.Start();
 
             Draw();
@@ -134,7 +156,8 @@ namespace Sharpsaver.Views
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            bricks[Brick.random.Next(bricks.Count)].Switch();
+            // Change color of random brick
+            bricks[Settings.Random.Next(bricks.Count)].Switch();
         }
     }
 }

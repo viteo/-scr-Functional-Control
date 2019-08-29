@@ -8,12 +8,12 @@ namespace Sharpsaver.ViewModels
     public class SettingsViewModel : ObservableObject
     {
 
-        public Param1 Parameter1
+        public Layout Layout
         {
-            get => Settings.Instance.param1;
+            get => Settings.Instance.Layout;
             set
             {
-                Settings.Instance.param1 = value;
+                Settings.Instance.Layout = value;
                 OnPropertyChanged();
             }
                 
@@ -29,22 +29,32 @@ namespace Sharpsaver.ViewModels
             }
         }
 
-        public int Parameter3
+        public int BrickSize
         {
-            get => Settings.Instance.param3;
+            get => Settings.Instance.BrickSize;
             set
             {
-                Settings.Instance.param3 = value;
+                Settings.Instance.BrickSize = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public double SwitchPeriod
+        {
+            get => Settings.Instance.SwitchPeriod;
+            set
+            {
+                Settings.Instance.SwitchPeriod = value;
                 OnPropertyChanged();
             }
         }
 
-        public bool Parameter4
+        public bool IsFullscreen
         {
-            get => Settings.Instance.param4;
+            get => Settings.Instance.IsFullscreen;
             set
             {
-                Settings.Instance.param4 = value;
+                Settings.Instance.IsFullscreen = value;
                 OnPropertyChanged();
             }
         }

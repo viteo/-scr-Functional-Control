@@ -6,13 +6,10 @@ using System.Xml.Serialization;
 
 namespace Sharpsaver
 {
-    public enum Param1
+    public enum Layout
     {
-        One,
-        Two,
-        Three,
-        Four,
-        All
+        Straight,
+        Brickwall
     }
 
     public enum Param2
@@ -32,18 +29,21 @@ namespace Sharpsaver.Models
             "\\sharpsaver.xml";
 
         public static Settings Instance;
+        public static Random Random = new Random();
 
-        public Param1 param1 { get; set; }
+        public Layout Layout { get; set; }
         public Param2 param2 { get; set; }
-        public int param3 { get; set; }
-        public bool param4 { get; set; }
+        public int BrickSize { get; set; }
+        public double SwitchPeriod { get; set; }
+        public bool IsFullscreen { get; set; }
 
         public Settings()
         {
-            this.param1 = Param1.All;
+            //Default Parameters
+            this.Layout = Layout.Straight;
             this.param2 = Param2.Ei;
-            this.param3 = 0;
-            this.param4 = true;
+            this.BrickSize = 4;
+            this.IsFullscreen = false;
         }
 
         public void LoadSettings()

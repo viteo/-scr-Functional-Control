@@ -21,7 +21,32 @@ namespace Sharpsaver.Views
         {
             InitializeComponent();
             isPreviewWindow = false;
-            Loaded += Window_Loaded;
+        }
+
+        public ScreensaverView(IntPtr previewHwnd)
+        {
+            InitializeComponent();
+            isPreviewWindow = true;
+
+            Rect lpRect = new Rect();
+            bool bGetRect = InteropHelper.GetClientRect(previewHwnd, ref lpRect);
+
+            HwndSourceParameters sourceParams = new HwndSourceParameters("sourceParams");
+            sourceParams.PositionX = 0;
+            sourceParams.PositionY = 0;
+            sourceParams.Height = lpRect.Bottom - lpRect.Top;
+            sourceParams.Width = lpRect.Right - lpRect.Left;
+            this.Field.Height = sourceParams.Height;
+            this.Field.Width = sourceParams.Width;
+            sourceParams.ParentWindow = previewHwnd;
+            //WS_VISIBLE = 0x10000000; WS_CHILD = 0x40000000; WS_CLIPCHILDREN = 0x02000000;
+            sourceParams.WindowStyle = (int)(0x10000000L | 0x40000000L | 0x02000000L);
+
+            //Using HwndSource instead of this.Show() to properly obtain handle of this window
+            HwndSource winWPFContent = new HwndSource(sourceParams);
+            winWPFContent.Disposed += new EventHandler(this.Dispose);
+            winWPFContent.ContentRendered += new EventHandler(this.Window_Loaded);
+            winWPFContent.RootVisual = this.Viewbox;
         }
 
         private void Draw()
@@ -99,6 +124,11 @@ namespace Sharpsaver.Views
                 Canvas.SetLeft(this.MagicNumber, LEFT + size / 30);
                 Canvas.SetTop(this.MagicNumber, size / 30);
             }
+        }
+
+        internal void Dispose(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void Window_MouseMove(object sender, MouseEventArgs e)

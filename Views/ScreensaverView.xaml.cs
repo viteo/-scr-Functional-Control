@@ -21,6 +21,7 @@ namespace Sharpsaver.Views
         {
             InitializeComponent();
             isPreviewWindow = false;
+            Loaded += Window_Loaded;
         }
 
         private void Draw()
@@ -130,7 +131,7 @@ namespace Sharpsaver.Views
             Application.Current.Shutdown();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        public void Window_Loaded(object sender, EventArgs e)
         {
             // Get settins from file or default
             Settings.Instance = new Settings();

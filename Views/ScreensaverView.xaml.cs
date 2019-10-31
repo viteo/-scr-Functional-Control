@@ -25,8 +25,30 @@ namespace Sharpsaver.Views
         public ScreensaverView(IntPtr previewHandle)
         {
             InitializeComponent();
-            WindowState = WindowState.Normal;
             isPreviewWindow = true;
+            Rect parentRect = new Rect();
+
+#if NET30 || NET35
+            bool bGetRect = InteropHelper.GetClientRect(previewHandle, ref parentRect);
+
+            HwndSourceParameters sourceParams = new HwndSourceParameters("sourceParams");
+            sourceParams.PositionX = 0;
+            sourceParams.PositionY = 0;
+            sourceParams.Height = parentRect.Height;
+            sourceParams.Width = parentRect.Width;
+            this.Field.Height = sourceParams.Height;
+            this.Field.Width = sourceParams.Width;
+            sourceParams.ParentWindow = previewHandle;
+            //WS_VISIBLE = 0x10000000; WS_CHILD = 0x40000000; WS_CLIPCHILDREN = 0x02000000;
+            sourceParams.WindowStyle = (int)(0x10000000L | 0x40000000L | 0x02000000L);
+
+            //Using HwndSource instead of this.Show() to properly obtain handle of this window
+            HwndSource winWPFContent = new HwndSource(sourceParams);
+            winWPFContent.Disposed += new EventHandler(this.Dispose);
+            winWPFContent.ContentRendered += new EventHandler(this.Window_Loaded);
+            winWPFContent.RootVisual = this.Viewbox;
+#else
+            WindowState = WindowState.Normal;
 
             IntPtr windowHandle = new WindowInteropHelper(GetWindow(this)).EnsureHandle();
 
@@ -42,10 +64,11 @@ namespace Sharpsaver.Views
             InteropHelper.SetWindowLong(windowHandle, -16, 0x40000000L);
 
             // Place the window inside the parent
-            InteropHelper.GetClientRect(previewHandle, out Rect parentRect);
+            InteropHelper.GetClientRect(previewHandle, ref parentRect);
 
             Width = parentRect.Width;
             Height = parentRect.Height;
+#endif
         }
 
         private void Draw()
@@ -155,7 +178,7 @@ namespace Sharpsaver.Views
             Application.Current.Shutdown();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, EventArgs e)
         {
             // Get settins from file or default
             Settings.Instance = new Settings();
@@ -173,6 +196,11 @@ namespace Sharpsaver.Views
         {
             // Change color of random brick
             bricks[Settings.Random.Next(bricks.Count)].Switch();
+        }
+
+        internal void Dispose(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

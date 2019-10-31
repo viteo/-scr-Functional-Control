@@ -1,4 +1,5 @@
 ﻿using Sharpsaver.Models;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -6,24 +7,13 @@ namespace Sharpsaver.ViewModels
 {
     public class SettingsViewModel : ObservableObject
     {
-
         public Layout Layout
         {
             get => Settings.Instance.Layout;
             set
             {
                 Settings.Instance.Layout = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Param2 Parameter2
-        {
-            get => Settings.Instance.param2;
-            set
-            {
-                Settings.Instance.param2 = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Layout");
             }
         }
 
@@ -33,7 +23,7 @@ namespace Sharpsaver.ViewModels
             set
             {
                 Settings.Instance.BrickSize = value;
-                OnPropertyChanged();
+                OnPropertyChanged("BrickSize");
             }
         }
 
@@ -43,7 +33,7 @@ namespace Sharpsaver.ViewModels
             set
             {
                 Settings.Instance.SwitchPeriod = value;
-                OnPropertyChanged();
+                OnPropertyChanged("SwitchPeriod");
             }
         }
 
@@ -53,7 +43,7 @@ namespace Sharpsaver.ViewModels
             set
             {
                 Settings.Instance.ShowMagicNumber = value;
-                OnPropertyChanged();
+                OnPropertyChanged("ShowMagicNumber");
             }
         }
 
@@ -63,7 +53,7 @@ namespace Sharpsaver.ViewModels
             set
             {
                 Settings.Instance.IsFullscreen = value;
-                OnPropertyChanged();
+                OnPropertyChanged("IsFullscreen");
             }
         }
 
@@ -75,10 +65,10 @@ namespace Sharpsaver.ViewModels
 
         public ICommand SaveCommand
         {
-            get { return new DelegateCommand(Save); }
+            get { return new DelegateCommand(new Action<object>(Save)); }
         }
 
-        public void Save()
+        public void Save(object obj)
         {
             Settings.Instance.SaveSettings();
             Application.Current.Shutdown();

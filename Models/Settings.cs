@@ -11,14 +11,6 @@ namespace Sharpsaver
         Straight,
         Brickwall
     }
-
-    public enum Param2
-    {
-        Ei,
-        Bi,
-        Si,
-        Di,
-    }
 }
 
 namespace Sharpsaver.Models
@@ -32,7 +24,6 @@ namespace Sharpsaver.Models
         public static Random Random = new Random();
 
         public Layout Layout { get; set; }
-        public Param2 param2 { get; set; }
         public int BrickSize { get; set; }
         public double SwitchPeriod { get; set; }
         public bool ShowMagicNumber { get; set; }
@@ -42,7 +33,6 @@ namespace Sharpsaver.Models
         {
             //Default Parameters
             this.Layout = Layout.Straight;
-            this.param2 = Param2.Ei;
             this.BrickSize = 4;
             this.ShowMagicNumber = true;
             this.IsFullscreen = true;

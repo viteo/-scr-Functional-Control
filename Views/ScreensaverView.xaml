@@ -13,7 +13,7 @@
         MouseDown="Window_MouseDown"
         KeyDown="Window_KeyDown"
         Loaded="Window_Loaded">
-    <Viewbox Stretch="Fill">
+    <Viewbox Stretch="Fill" x:Name="Viewbox">
         <Canvas Width="{Binding ElementName=ScreensaverWindow, Path=ActualWidth}"
                 Height="{Binding ElementName=ScreensaverWindow, Path=ActualHeight}"
                 x:Name="Field">

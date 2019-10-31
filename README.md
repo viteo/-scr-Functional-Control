@@ -1,2 +1,2 @@
-# Sharpsaver
-A WPF Screensaver template with working Preview window.
+# Functional Control Screensaver
+Simulates functional control application for monolithic integrated circuits.
